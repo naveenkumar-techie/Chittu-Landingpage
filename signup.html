@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | SMM Panel</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .form-input {
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-group {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .floating-bg {
+            background: linear-gradient(135deg, #000000 0%, #333333 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .floating-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 25% 75%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 25%, rgba(255,255,255,0.05) 0%, transparent 50%);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(1deg); }
+        }
+        
+        .error-message {
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+        
+        .error-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .success-message {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.3s ease;
+        }
+        
+        .success-message.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+    </style>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#000000',
+                        secondary: '#ffffff'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-50 py-4 px-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center bg-white/80 backdrop-blur-md shadow-lg rounded-full px-6 py-3">
+            <div class="flex items-center">
+                <a href="index.html" class="text-2xl font-bold">
+                    <span class="text-black">SMM</span><span class="text-gray-500">Panel</span>
+                    <span class="ml-1 bg-black text-white text-xs px-2 py-0.5 rounded-md">PRO</span>
+                </a>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <a href="signin.html" class="font-medium text-gray-600 hover:text-black transition-colors">Already have an account?</a>
+                <a href="signin.html" class="bg-black text-white px-5 py-2 rounded-full font-medium hover:bg-gray-800 transition-colors">
+                    Sign In
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="min-h-screen flex">
+        <!-- Left Side - Form -->
+        <div class="flex-1 flex items-center justify-center px-6 py-12 pt-28">
+            <div class="max-w-md w-full space-y-8">
+                <div class="text-center">
+                    <h2 class="text-4xl font-bold text-black mb-2">Create Account</h2>
+                    <p class="text-gray-600">Join thousands of satisfied customers</p>
+                </div>
+
+                <!-- Success Message -->
+                <div id="success-message" class="success-message bg-green-50 border border-green-200 rounded-xl p-4 text-green-800 text-center hidden">
+                    <div class="flex items-center justify-center mb-2">
+                        <i data-lucide="check-circle" class="w-5 h-5 mr-2"></i>
+                        <span class="font-medium">Account created successfully!</span>
+                    </div>
+                    <p class="text-sm">Redirecting to dashboard...</p>
+                </div>
+
+                <form id="signup-form" class="space-y-6">
+                    <!-- Full Name -->
+                    <div class="form-group">
+                        <label for="fullName" class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                        <input 
+                            type="text" 
+                            id="fullName" 
+                            name="fullName"
+                            class="form-input w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                            placeholder="Enter your full name"
+                            required
+                        >
+                        <div class="error-message text-red-500 text-sm mt-1" id="fullName-error"></div>
+                    </div>
+
+                    <!-- Username -->
+                    <div class="form-group">
+                        <label for="username" class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+                        <input 
+                            type="text" 
+                            id="username" 
+                            name="username"
+                            class="form-input w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                            placeholder="Choose a username"
+                            required
+                        >
+                        <div class="error-message text-red-500 text-sm mt-1" id="username-error"></div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="form-group">
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email"
+                            class="form-input w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                            placeholder="Enter your email"
+                            required
+                        >
+                        <div class="error-message text-red-500 text-sm mt-1" id="email-error"></div>
+                    </div>
+
+                    <!-- WhatsApp Number -->
+                    <div class="form-group">
+                        <label for="whatsapp" class="block text-sm font-medium text-gray-700 mb-2">WhatsApp Number</label>
+                        <input 
+                            type="tel" 
+                            id="whatsapp" 
+                            name="whatsapp"
+                            class="form-input w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                            placeholder="Enter your WhatsApp number"
+                            required
+                        >
+                        <div class="error-message text-red-500 text-sm mt-1" id="whatsapp-error"></div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="form-group">
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                        <div class="relative">
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password"
+                                class="form-input w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                                placeholder="Create a password"
+                                required
+                            >
+                            <button type="button" id="toggle-password" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700">
+                                <i data-lucide="eye" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                        <div class="error-message text-red-500 text-sm mt-1" id="password-error"></div>
+                        <div class="mt-2">
+                            <div class="text-xs text-gray-500">Password strength:</div>
+                            <div class="flex space-x-1 mt-1">
+                                <div class="h-1 bg-gray-200 rounded-full flex-1" id="strength-1"></div>
+                                <div class="h-1 bg-gray-200 rounded-full flex-1" id="strength-2"></div>
+                                <div class="h-1 bg-gray-200 rounded-full flex-1" id="strength-3"></div>
+                                <div class="h-1 bg-gray-200 rounded-full flex-1" id="strength-4"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="form-group">
+                        <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
+                        <div class="relative">
+                            <input 
+                                type="password" 
+                                id="confirmPassword" 
+                                name="confirmPassword"
+                                class="form-input w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                                placeholder="Confirm your password"
+                                required
+                            >
+                            <button type="button" id="toggle-confirm-password" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700">
+                                <i data-lucide="eye" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                        <div class="error-message text-red-500 text-sm mt-1" id="confirmPassword-error"></div>
+                    </div>
+
+                    <!-- Terms and Conditions -->
+                    <div class="form-group">
+                        <label class="flex items-start space-x-3">
+                            <input type="checkbox" id="terms" name="terms" class="mt-1 h-4 w-4 text-black focus:ring-black border-gray-300 rounded" required>
+                            <span class="text-sm text-gray-600">
+                                I agree to the <a href="#" class="text-black font-medium hover:underline">Terms of Service</a> 
+                                and <a href="#" class="text-black font-medium hover:underline">Privacy Policy</a>
+                            </span>
+                        </label>
+                        <div class="error-message text-red-500 text-sm mt-1" id="terms-error"></div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-group">
+                        <button 
+                            type="submit" 
+                            id="submit-btn"
+                            class="w-full bg-black text-white py-3 rounded-xl font-semibold hover:bg-gray-800 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg flex items-center justify-center"
+                        >
+                            <span id="submit-text">Sign Up</span>
+                            <div id="submit-loader" class="hidden ml-2">
+                                <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Divider -->
+                    <div class="form-group">
+                        <div class="relative">
+                            <div class="absolute inset-0 flex items-center">
+                                <div class="w-full border-t border-gray-300"></div>
+                            </div>
+                            <div class="relative flex justify-center text-sm">
+                                <span class="px-2 bg-gray-50 text-gray-500">or</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Google Sign Up -->
+                    <div class="form-group">
+                        <button 
+                            type="button" 
+                            id="google-signup"
+                            class="w-full bg-white border border-gray-300 text-gray-700 py-3 rounded-xl font-semibold hover:bg-gray-50 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg flex items-center justify-center"
+                        >
+                            <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24">
+                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                            </svg>
+                            Sign up with Google
+                        </button>
+                    </div>
+
+                    <!-- Sign In Link -->
+                    <div class="form-group text-center">
+                        <p class="text-gray-600">
+                            Already have an account? 
+                            <a href="signin.html" class="text-black font-medium hover:underline">Sign In</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Right Side - Design -->
+        <div class="hidden lg:flex lg:flex-1 floating-bg">
+            <div class="flex items-center justify-center w-full p-8 text-white relative z-10">
+                <div class="max-w-md text-center">
+                    <div class="mb-8">
+                        <div class="w-24 h-24 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-6">
+                            <i data-lucide="trending-up" class="w-12 h-12"></i>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-4">Grow Your Presence</h3>
+                        <p class="text-white/80 text-lg">Join thousands of satisfied customers who've boosted their social media with our premium services.</p>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between bg-white/10 backdrop-blur-sm rounded-xl p-4">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center mr-3">
+                                    <i data-lucide="instagram" class="w-5 h-5 text-blue-400"></i>
+                                </div>
+                                <div class="text-left">
+                                    <div class="font-medium">Instagram Growth</div>
+                                    <div class="text-sm text-white/60">High quality followers</div>
+                                </div>
+                            </div>
+                            <div class="text-green-400 font-bold">+250%</div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between bg-white/10 backdrop-blur-sm rounded-xl p-4">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-red-500/20 rounded-full flex items-center justify-center mr-3">
+                                    <i data-lucide="youtube" class="w-5 h-5 text-red-400"></i>
+                                </div>
+                                <div class="text-left">
+                                    <div class="font-medium">YouTube Views</div>
+                                    <div class="text-sm text-white/60">Boost your videos</div>
+                                </div>
+                            </div>
+                            <div class="text-green-400 font-bold">+180%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Initialize animations when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initFormAnimations();
+            initValidation();
+            initPasswordToggle();
+            initPasswordStrength();
+            initGoogleSignup();
+        });
+
+        // Form animations
+        function initFormAnimations() {
+            const formGroups = document.querySelectorAll('.form-group');
+            
+            gsap.to(formGroups, {
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                stagger: 0.1,
+                ease: "power2.out",
+                delay: 0.3
+            });
+        }
+
+        // Form validation
+        function initValidation() {
+            const form = document.getElementById('signup-form');
+            const inputs = form.querySelectorAll('input[required]');
+
+            // Real-time validation
+            inputs.forEach(input => {
+                input.addEventListener('blur', () => validateField(input));
+                input.addEventListener('input', () => clearError(input));
+            });
+
+            // Form submission
+            form.addEventListener('submit', handleSubmit);
+        }
+
+        function validateField(input) {
+            const value = input.value.trim();
+            const fieldName = input.name;
+            let isValid = true;
+            let errorMessage = '';
+
+            // Clear previous errors
+            clearError(input);
+
+            switch(fieldName) {
+                case 'fullName':
+                    if (value.length < 2) {
+                        errorMessage = 'Full name must be at least 2 characters';
+                        isValid = false;
+                    } else if (!/^[a-zA-Z\s]+$/.test(value)) {
+                        errorMessage = 'Full name can only contain letters and spaces';
+                        isValid = false;
+                    }
+                    break;
+
+                case 'username':
+                    if (value.length < 3) {
+                        errorMessage = 'Username must be at least 3 characters';
+                        isValid = false;
+                    } else if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+                        errorMessage = 'Username can only contain letters, numbers, and underscores';
+                        isValid = false;
+                    }
+                    break;
+
+                case 'email':
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(value)) {
+                        errorMessage = 'Please enter a valid email address';
+                        isValid = false;
+                    }
+                    break;
+
+                case 'whatsapp':
+                    const phoneRegex = /^\+?[\d\s\-\(\)]{10,}$/;
+                    if (!phoneRegex.test(value)) {
+                        errorMessage = 'Please enter a valid WhatsApp number';
+                        isValid = false;
+                    }
+                    break;
+
+                case 'password':
+                    if (value.length < 8) {
+                        errorMessage = 'Password must be at least 8 characters';
+                        isValid = false;
+                    } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(value)) {
+                        errorMessage = 'Password must contain uppercase, lowercase, and number';
+                        isValid = false;
+                    }
+                    break;
+
+                case 'confirmPassword':
+                    const password = document.getElementById('password').value;
+                    if (value !== password) {
+                        errorMessage = 'Passwords do not match';
+                        isValid = false;
+                    }
+                    break;
+            }
+
+            if (!isValid) {
+                showError(input, errorMessage);
+            }
+
+            return isValid;
+        }
+
+        function showError(input, message) {
+            const errorDiv = document.getElementById(input.name + '-error');
+            if (errorDiv) {
+                errorDiv.textContent = message;
+                errorDiv.classList.add('show');
+                input.classList.add('border-red-500');
+                input.classList.remove('border-gray-300');
+            }
+        }
+
+        function clearError(input) {
+            const errorDiv = document.getElementById(input.name + '-error');
+            if (errorDiv) {
+                errorDiv.textContent = '';
+                errorDiv.classList.remove('show');
+                input.classList.remove('border-red-500');
+                input.classList.add('border-gray-300');
+            }
+        }
+
+        function handleSubmit(e) {
+            e.preventDefault();
+            
+            const form = e.target;
+            const inputs = form.querySelectorAll('input[required]');
+            const termsCheckbox = document.getElementById('terms');
+            let isFormValid = true;
+
+            // Validate all fields
+            inputs.forEach(input => {
+                if (!validateField(input)) {
+                    isFormValid = false;
+                }
+            });
+
+            // Check terms and conditions
+            if (!termsCheckbox.checked) {
+                const termsError = document.getElementById('terms-error');
+                termsError.textContent = 'Please accept the terms and conditions';
+                termsError.classList.add('show');
+                isFormValid = false;
+            }
+
+            if (isFormValid) {
+                submitForm();
+            }
+        }
+
+        function submitForm() {
+            const submitBtn = document.getElementById('submit-btn');
+            const submitText = document.getElementById('submit-text');
+            const submitLoader = document.getElementById('submit-loader');
+
+            // Show loading state
+            submitBtn.disabled = true;
+            submitText.textContent = 'Creating Account...';
+            submitLoader.classList.remove('hidden');
+
+            // Simulate API call
+            setTimeout(() => {
+                showSuccess();
+            }, 2000);
+        }
+
+        function showSuccess() {
+            const successMessage = document.getElementById('success-message');
+            const form = document.getElementById('signup-form');
+            
+            form.style.display = 'none';
+            successMessage.classList.remove('hidden');
+            successMessage.classList.add('show');
+
+            // Redirect after 3 seconds
+            setTimeout(() => {
+                window.location.href = 'home.html'; // or login.html
+            }, 3000);
+        }
+
+        // Password toggle functionality
+        function initPasswordToggle() {
+            const togglePassword = document.getElementById('toggle-password');
+            const toggleConfirmPassword = document.getElementById('toggle-confirm-password');
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+
+            togglePassword.addEventListener('click', () => {
+                togglePasswordVisibility(passwordInput, togglePassword);
+            });
+
+            toggleConfirmPassword.addEventListener('click', () => {
+                togglePasswordVisibility(confirmPasswordInput, toggleConfirmPassword);
+            });
+        }
+
+        function togglePasswordVisibility(input, button) {
+            const icon = button.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.setAttribute('data-lucide', 'eye-off');
+            } else {
+                input.type = 'password';
+                icon.setAttribute('data-lucide', 'eye');
+            }
+            
+            lucide.createIcons();
+        }
+
+        // Password strength indicator
+        function initPasswordStrength() {
+            const passwordInput = document.getElementById('password');
+            
+            passwordInput.addEventListener('input', () => {
+                updatePasswordStrength(passwordInput.value);
+            });
+        }
+
+        function updatePasswordStrength(password) {
+            const indicators = ['strength-1', 'strength-2', 'strength-3', 'strength-4'];
+            let strength = 0;
+
+            // Reset indicators
+            indicators.forEach(id => {
+                const indicator = document.getElementById(id);
+                indicator.className = 'h-1 bg-gray-200 rounded-full flex-1';
+            });
+
+            if (password.length >= 8) strength++;
+            if (/[a-z]/.test(password)) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/\d/.test(password)) strength++;
+            if (/[^a-zA-Z\d]/.test(password)) strength++;
+
+            // Update indicators based on strength
+            const colors = ['bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-green-500'];
+            
+            for (let i = 0; i < Math.min(strength, 4); i++) {
+                const indicator = document.getElementById(indicators[i]);
+                indicator.className = `h-1 ${colors[Math.min(strength - 1, 3)]} rounded-full flex-1`;
+            }
+        }
+
+        // Google signup
+        function initGoogleSignup() {
+            const googleBtn = document.getElementById('google-signup');
+            
+            googleBtn.addEventListener('click', () => {
+                // Implement Google OAuth here
+                console.log('Google signup clicked');
+                alert('Google signup functionality would be implemented here with OAuth');
+            });
+        }
+    </script>
+</body>
+</html>

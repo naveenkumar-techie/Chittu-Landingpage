@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In | SMM Panel</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .form-input {
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-group {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .floating-bg {
+            background: linear-gradient(135deg, #000000 0%, #333333 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .floating-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 75% 25%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 25% 75%, rgba(255,255,255,0.05) 0%, transparent 50%);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(-1deg); }
+        }
+        
+        .error-message {
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+        
+        .error-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .success-message {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.3s ease;
+        }
+        
+        .success-message.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        .pulse-ring {
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 1; }
+            80%, 100% { transform: scale(1.2); opacity: 0; }
+        }
+    </style>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#000000',
+                        secondary: '#ffffff'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-50 py-4 px-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center bg-white/80 backdrop-blur-md shadow-lg rounded-full px-6 py-3">
+            <div class="flex items-center">
+                <a href="index.html" class="text-2xl font-bold">
+                    <span class="text-black">SMM</span><span class="text-gray-500">Panel</span>
+                    <span class="ml-1 bg-black text-white text-xs px-2 py-0.5 rounded-md">PRO</span>
+                </a>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <a href="signup.html" class="font-medium text-gray-600 hover:text-black transition-colors">Need an account?</a>
+                <a href="signup.html" class="bg-black text-white px-5 py-2 rounded-full font-medium hover:bg-gray-800 transition-colors">
+                    Sign Up
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="min-h-screen flex">
+        <!-- Left Side - Design -->
+        <div class="hidden lg:flex lg:flex-1 floating-bg">
+            <div class="flex items-center justify-center w-full p-8 text-white relative z-10">
+                <div class="max-w-md text-center">
+                    <div class="mb-8">
+                        <div class="relative w-24 h-24 mx-auto mb-6">
+                            <div class="absolute inset-0 bg-white/10 backdrop-blur-sm rounded-2xl pulse-ring"></div>
+                            <div class="relative w-24 h-24 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
+                                <i data-lucide="zap" class="w-12 h-12"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-4">Welcome Back</h3>
+                        <p class="text-white/80 text-lg">Sign in to continue growing your social media presence with our premium services.</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-4 text-center">
+                        <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+                            <div class="text-2xl font-bold">5K+</div>
+                            <div class="text-sm text-white/60">Customers</div>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+                            <div class="text-2xl font-bold">99.9%</div>
+                            <div class="text-sm text-white/60">Uptime</div>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+                            <div class="text-2xl font-bold">24/7</div>
+                            <div class="text-sm text-white/60">Support</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side - Form -->
+        <div class="flex-1 flex items-center justify-center px-6 py-12 pt-28">
+            <div class="max-w-md w-full space-y-8">
+                <div class="text-center">
+                    <h2 class="text-4xl font-bold text-black mb-2">Welcome Back</h2>
+                    <p class="text-gray-600">Sign in to your account</p>
+                </div>
+
+                <!-- Success Message -->
+                <div id="success-message" class="success-message bg-green-50 border border-green-200 rounded-xl p-4 text-green-800 text-center hidden">
+                    <div class="flex items-center justify-center mb-2">
+                        <i data-lucide="check-circle" class="w-5 h-5 mr-2"></i>
+                        <span class="font-medium">Welcome back!</span>
+                    </div>
+                    <p class="text-sm">Redirecting to dashboard...</p>
+                </div>
+
+                <!-- Error Message -->
+                <div id="error-message" class="error-message bg-red-50 border border-red-200 rounded-xl p-4 text-red-800 text-center hidden">
+                    <div class="flex items-center justify-center mb-2">
+                        <i data-lucide="x-circle" class="w-5 h-5 mr-2"></i>
+                        <span class="font-medium" id="error-text">Invalid credentials</span>
+                    </div>
+                </div>
+
+                <form id="login-form" class="space-y-6">
+                    <!-- Username or Email -->
+                    <div class="form-group">
+                        <label for="loginField" class="block text-sm font-medium text-gray-700 mb-2">Username or Email</label>
+                        <input 
+                            type="text" 
+                            id="loginField" 
+                            name="loginField"
+                            class="form-input w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                            placeholder="Enter your username or email"
+                            required
+                        >
+                        <div class="error-message text-red-500 text-sm mt-1" id="loginField-error"></div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="form-group">
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                        <div class="relative">
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password"
+                                class="form-input w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                                placeholder="Enter your password"
+                                required
+                            >
+                            <button type="button" id="toggle-password" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700">
+                                <i data-lucide="eye" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                        <div class="error-message text-red-500 text-sm mt-1" id="password-error"></div>
+                    </div>
+
+                    <!-- Remember Me and Forgot Password -->
+                    <div class="form-group flex items-center justify-between">
+                        <label class="flex items-center">
+                            <input type="checkbox" id="remember" name="remember" class="h-4 w-4 text-black focus:ring-black border-gray-300 rounded">
+                            <span class="ml-2 text-sm text-gray-600">Remember me</span>
+                        </label>
+                        <a href="#" id="forgot-password" class="text-sm text-black font-medium hover:underline">Forgot password?</a>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-group">
+                        <button 
+                            type="submit" 
+                            id="submit-btn"
+                            class="w-full bg-black text-white py-3 rounded-xl font-semibold hover:bg-gray-800 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg flex items-center justify-center"
+                        >
+                            <span id="submit-text">Sign In</span>
+                            <div id="submit-loader" class="hidden ml-2">
+                                <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Divider -->
+                    <div class="form-group">
+                        <div class="relative">
+                            <div class="absolute inset-0 flex items-center">
+                                <div class="w-full border-t border-gray-300"></div>
+                            </div>
+                            <div class="relative flex justify-center text-sm">
+                                <span class="px-2 bg-gray-50 text-gray-500">or</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Google Sign In -->
+                    <div class="form-group">
+                        <button 
+                            type="button" 
+                            id="google-signin"
+                            class="w-full bg-white border border-gray-300 text-gray-700 py-3 rounded-xl font-semibold hover:bg-gray-50 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg flex items-center justify-center"
+                        >
+                            <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24">
+                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                            </svg>
+                            Sign in with Google
+                        </button>
+                    </div>
+
+                    <!-- Sign Up Link -->
+                    <div class="form-group text-center">
+                        <p class="text-gray-600">
+                            Don't have an account? 
+                            <a href="signup.html" class="text-black font-medium hover:underline">Sign Up</a>
+                        </p>
+                    </div>
+                </form>
+
+                <!-- Forgot Password Modal -->
+                <div id="forgot-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+                    <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 transform scale-95 transition-transform">
+                        <div class="text-center mb-6">
+                            <div class="w-16 h-16 bg-black/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i data-lucide="key" class="w-8 h-8 text-black"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-black mb-2">Reset Password</h3>
+                            <p class="text-gray-600">We'll send you a reset link</p>
+                        </div>
+                        
+                        <form id="forgot-form">
+                            <div class="mb-6">
+                                <label for="reset-email" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                                <input 
+                                    type="email" 
+                                    id="reset-email" 
+                                    name="reset-email"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                                    placeholder="Enter your email"
+                                    required
+                                >
+                                <div class="error-message text-red-500 text-sm mt-1" id="reset-email-error"></div>
+                            </div>
+                            
+                            <div class="flex space-x-4">
+                                <button type="button" id="modal-cancel" class="flex-1 border border-gray-300 text-gray-700 py-3 rounded-xl font-medium hover:bg-gray-50 transition-colors">
+                                    Cancel
+                                </button>
+                                <button type="submit" id="modal-submit" class="flex-1 bg-black text-white py-3 rounded-xl font-medium hover:bg-gray-800 transition-colors">
+                                    Send Reset Link
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initFormAnimations();
+            initValidation();
+            initPasswordToggle();
+            initForgotPassword();
+            initGoogleSignin();
+        });
+
+        // Form animations
+        function initFormAnimations() {
+            const formGroups = document.querySelectorAll('.form-group');
+            
+            gsap.to(formGroups, {
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                stagger: 0.1,
+                ease: "power2.out",
+                delay: 0.3
+            });
+        }
+
+        // Form validation
+        function initValidation() {
+            const form = document.getElementById('login-form');
+            const inputs = form.querySelectorAll('input[required]');
+
+            // Real-time validation
+            inputs.forEach(input => {
+                input.addEventListener('blur', () => validateField(input));
+                input.addEventListener('input', () => clearError(input));
+            });
+
+            // Form submission
+            form.addEventListener('submit', handleSubmit);
+        }
+
+        function validateField(input) {
+            const value = input.value.trim();
+            const fieldName = input.name;
+            let isValid = true;
+            let errorMessage = '';
+
+            // Clear previous errors
+            clearError(input);
+
+            switch(fieldName) {
+                case 'loginField':
+                    if (value.length < 3) {
+                        errorMessage = 'Please enter a valid username or email';
+                        isValid = false;
+                    }
+                    break;
+
+                case 'password':
+                    if (value.length < 6) {
+                        errorMessage = 'Password must be at least 6 characters';
+                        isValid = false;
+                    }
+                    break;
+            }
+
+            if (!isValid) {
+                showFieldError(input, errorMessage);
+            }
+
+            return isValid;
+        }
+
+        function showFieldError(input, message) {
+            const errorDiv = document.getElementById(input.name + '-error');
+            if (errorDiv) {
+                errorDiv.textContent = message;
+                errorDiv.classList.add('show');
+                input.classList.add('border-red-500');
+                input.classList.remove('border-gray-300');
+            }
+        }
+
+        function clearError(input) {
+            const errorDiv = document.getElementById(input.name + '-error');
+            if (errorDiv) {
+                errorDiv.textContent = '';
+                errorDiv.classList.remove('show');
+                input.classList.remove('border-red-500');
+                input.classList.add('border-gray-300');
+            }
+        }
+
+        function handleSubmit(e) {
+            e.preventDefault();
+            
+            const form = e.target;
+            const inputs = form.querySelectorAll('input[required]');
+            let isFormValid = true;
+
+            // Validate all fields
+            inputs.forEach(input => {
+                if (!validateField(input)) {
+                    isFormValid = false;
+                }
+            });
+
+            if (isFormValid) {
+                submitForm();
+            } else {
+                // Shake form on validation error
+                form.classList.add('shake');
+                setTimeout(() => form.classList.remove('shake'), 500);
+            }
+        }
+
+        function submitForm() {
+            const submitBtn = document.getElementById('submit-btn');
+            const submitText = document.getElementById('submit-text');
+            const submitLoader = document.getElementById('submit-loader');
+
+            // Show loading state
+            submitBtn.disabled = true;
+            submitText.textContent = 'Signing In...';
+            submitLoader.classList.remove('hidden');
+
+            // Simulate API call
+            setTimeout(() => {
+                const loginField = document.getElementById('loginField').value;
+                const password = document.getElementById('password').value;
+                
+                // Simulate authentication (replace with real API call)
+                if (loginField === 'demo' && password === 'password') {
+                    showSuccess();
+                } else {
+                    showError('Invalid username/email or password');
+                }
+            }, 2000);
+        }
+
+        function showSuccess() {
+            const successMessage = document.getElementById('success-message');
+            const form = document.getElementById('login-form');
+            
+            form.style.display = 'none';
+            successMessage.classList.remove('hidden');
+            successMessage.classList.add('show');
+
+            // Redirect after 2 seconds
+            setTimeout(() => {
+                window.location.href = 'home.html'; // or appropriate dashboard page
+            }, 2000);
+        }
+
+        function showError(message) {
+            const submitBtn = document.getElementById('submit-btn');
+            const submitText = document.getElementById('submit-text');
+            const submitLoader = document.getElementById('submit-loader');
+            const errorMessage = document.getElementById('error-message');
+            const errorText = document.getElementById('error-text');
+
+            // Reset button state
+            submitBtn.disabled = false;
+            submitText.textContent = 'Sign In';
+            submitLoader.classList.add('hidden');
+
+            // Show error message
+            errorText.textContent = message;
+            errorMessage.classList.remove('hidden');
+            errorMessage.classList.add('show');
+
+            // Shake form
+            const form = document.getElementById('login-form');
+            form.classList.add('shake');
+            setTimeout(() => form.classList.remove('shake'), 500);
+
+            // Hide error after 5 seconds
+            setTimeout(() => {
+                errorMessage.classList.remove('show');
+                setTimeout(() => errorMessage.classList.add('hidden'), 300);
+            }, 5000);
+        }
+
+        // Password toggle functionality
+        function initPasswordToggle() {
+            const togglePassword = document.getElementById('toggle-password');
+            const passwordInput = document.getElementById('password');
+
+            togglePassword.addEventListener('click', () => {
+                const icon = togglePassword.querySelector('i');
+                
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    icon.setAttribute('data-lucide', 'eye-off');
+                } else {
+                    passwordInput.type = 'password';
+                    icon.setAttribute('data-lucide', 'eye');
+                }
+                
+                lucide.createIcons();
+            });
+        }
+
+        // Forgot password functionality
+        function initForgotPassword() {
+            const forgotLink = document.getElementById('forgot-password');
+            const modal = document.getElementById('forgot-modal');
+            const cancelBtn = document.getElementById('modal-cancel');
+            const forgotForm = document.getElementById('forgot-form');
+
+            forgotLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                openModal();
+            });
+
+            cancelBtn.addEventListener('click', closeModal);
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+
+            forgotForm.addEventListener('submit', handleForgotSubmit);
+
+            // Close modal with Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                    closeModal();
+                }
+            });
+        }
+
+        function openModal() {
+            const modal = document.getElementById('forgot-modal');
+            const modalContent = modal.querySelector('.bg-white');
+            
+            modal.classList.remove('hidden');
+            
+            gsap.fromTo(modalContent, 
+                { scale: 0.9, opacity: 0 },
+                { scale: 1, opacity: 1, duration: 0.3, ease: "power2.out" }
+            );
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('forgot-modal');
+            const modalContent = modal.querySelector('.bg-white');
+            
+            gsap.to(modalContent, {
+                scale: 0.9,
+                opacity: 0,
+                duration: 0.2,
+                ease: "power2.in",
+                onComplete: () => modal.classList.add('hidden')
+            });
+        }
+
+        function handleForgotSubmit(e) {
+            e.preventDefault();
+            
+            const emailInput = document.getElementById('reset-email');
+            const email = emailInput.value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (!emailRegex.test(email)) {
+                const errorDiv = document.getElementById('reset-email-error');
+                errorDiv.textContent = 'Please enter a valid email address';
+                errorDiv.classList.add('show');
+                return;
+            }
+            
+            const submitBtn = document.getElementById('modal-submit');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+            
+            // Simulate API call
+            setTimeout(() => {
+                submitBtn.textContent = 'Sent!';
+                submitBtn.classList.add('bg-green-500');
+                
+                setTimeout(() => {
+                    closeModal();
+                    // Reset form
+                    emailInput.value = '';
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Send Reset Link';
+                    submitBtn.classList.remove('bg-green-500');
+                }, 1500);
+            }, 2000);
+        }
+
+        // Google signin
+        function initGoogleSignin() {
+            const googleBtn = document.getElementById('google-signin');
+            
+            googleBtn.addEventListener('click', () => {
+                // Implement Google OAuth here
+                console.log('Google signin clicked');
+                alert('Google signin functionality would be implemented here with OAuth');
+            });
+        }
+
+        // Demo credentials helper (remove in production)
+        setTimeout(() => {
+            const form = document.getElementById('login-form');
+            const demoHelper = document.createElement('div');
+            demoHelper.className = 'bg-blue-50 border border-blue-200 rounded-xl p-4 text-blue-800 text-sm';
+            demoHelper.innerHTML = `
+                <div class="flex items-center mb-2">
+                    <i data-lucide="info" class="w-4 h-4 mr-2"></i>
+                    <span class="font-medium">Demo Credentials</span>
+                </div>
+                <p>Username: <code class="bg-blue-100 px-1 rounded">demo</code> | Password: <code class="bg-blue-100 px-1 rounded">password</code></p>
+            `;
+            
+            form.insertBefore(demoHelper, form.firstChild);
+            lucide.createIcons();
+        }, 1000);
+    </script>
+</body>
+</html>

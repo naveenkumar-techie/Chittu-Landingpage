@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | SMM Panel</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .menu-open {
+            overflow: hidden;
+        }
+        
+        .gsap-reveal {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .contact-form {
+            backdrop-filter: blur(10px);
+        }
+        
+        .faq-item {
+            transition: all 0.3s ease;
+        }
+        
+        .input-group {
+            position: relative;
+        }
+        
+        .input-group input:focus + label,
+        .input-group textarea:focus + label,
+        .input-group input:not(:placeholder-shown) + label,
+        .input-group textarea:not(:placeholder-shown) + label {
+            transform: translateY(-1.5rem) scale(0.875);
+            color: #000;
+        }
+        
+        .input-label {
+            position: absolute;
+            left: 1rem;
+            top: 1rem;
+            color: #6b7280;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+    </style>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#000000',
+                        secondary: '#ffffff'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-white text-black min-h-screen">
+    <!-- Top Banner -->
+    <div class="bg-black text-white py-2 px-4 text-center text-sm">
+        <p>🔥 Special offer: 20% OFF all packages with code <span class="font-bold">SMM20</span> - Limited time only!</p>
+    </div>
+    
+    <!-- Navbar -->
+    <nav id="navbar" class="fixed top-8 left-0 w-full z-50 py-4 px-6 transition-all duration-300">
+        <div class="max-w-7xl mx-auto flex justify-between items-center bg-white/80 backdrop-blur-md shadow-lg rounded-full px-6 py-3">
+            <div class="flex items-center">
+                <a href="index.html" class="text-2xl font-bold">
+                    <span class="text-black">SMM</span><span class="text-gray-500">Panel</span>
+                    <span class="ml-1 bg-black text-white text-xs px-2 py-0.5 rounded-md">PRO</span>
+                </a>
+            </div>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="home.html" class="font-medium hover:text-gray-500 transition-colors">Home</a>
+                <a href="about.html" class="font-medium hover:text-gray-500 transition-colors">About</a>
+                <a href="services.html" class="font-medium hover:text-gray-500 transition-colors">Services</a>
+                <a href="blog.html" class="font-medium hover:text-gray-500 transition-colors">Blog</a>
+                <a href="contact.html" class="font-medium text-black border-b-2 border-black transition-colors">Contact</a>
+                <div class="flex items-center gap-4">
+                    <a href="signin.html" class="font-medium hover:text-gray-500 transition-colors">Login</a>
+                    <a href="signup.html" class="bg-black text-white px-5 py-2 rounded-full font-medium hover:bg-gray-800 transition-colors flex items-center">
+                        <span>Sign Up</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-button" class="md:hidden text-black focus:outline-none">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="fixed inset-0 bg-black bg-opacity-95 z-50 flex flex-col justify-center items-center text-white transform translate-x-full transition-transform duration-300 ease-in-out">
+            <button id="mobile-menu-close" class="absolute top-6 right-6 text-white focus:outline-none">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <div class="flex flex-col space-y-6 text-center text-xl">
+                <a href="index.html" class="font-medium hover:text-gray-400 transition-colors">Home</a>
+                <a href="about.html" class="font-medium hover:text-gray-400 transition-colors">About</a>
+                <a href="services.html" class="font-medium hover:text-gray-400 transition-colors">Services</a>
+                <a href="blog.html" class="font-medium hover:text-gray-400 transition-colors">Blog</a>
+                <a href="contact.html" class="font-medium text-white border-b border-white pb-1">Contact</a>
+                <div class="flex flex-col space-y-4 mt-6">
+                    <a href="#" class="border border-white text-white px-6 py-2 rounded-md font-medium hover:bg-white hover:text-black transition-colors">Login</a>
+                    <a href="#" class="bg-white text-black px-6 py-2 rounded-md font-medium hover:bg-gray-200 transition-colors">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Page Hero -->
+    <section id="hero" class="pt-32 pb-20 px-6 bg-gradient-to-b from-black to-gray-900 text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <img src="https://images.unsplash.com/photo-1423666639041-f56000c27a9a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1974&q=80" alt="Contact Background" class="w-full h-full object-cover">
+        </div>
+        
+        <div class="container mx-auto relative z-10">
+            <div class="max-w-4xl mx-auto text-center gsap-reveal">
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight">Let's Talk</h1>
+                <p class="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto">We'd love to hear from you. Fill out the form below or contact us directly. Our team is here to help you grow your social media presence.</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact Form Section -->
+    <section id="contact-form" class="py-24 px-6 bg-white">
+        <div class="container mx-auto">
+            <div class="grid lg:grid-cols-2 gap-16 items-start">
+                <!-- Contact Form -->
+                <div class="gsap-reveal">
+                    <div class="bg-white rounded-2xl shadow-2xl p-8 contact-form border border-gray-100">
+                        <h2 class="text-3xl font-bold mb-6">Send us a message</h2>
+                        <p class="text-gray-600 mb-8">Have a question or need help? Fill out the form and we'll get back to you within 24 hours.</p>
+                        
+                        <form id="contact-form-element" class="space-y-6">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="input-group">
+                                    <input type="text" id="firstName" name="firstName" placeholder=" " class="w-full px-4 py-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all" required>
+                                    <label for="firstName" class="input-label">First Name</label>
+                                </div>
+                                <div class="input-group">
+                                    <input type="text" id="lastName" name="lastName" placeholder=" " class="w-full px-4 py-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all" required>
+                                    <label for="lastName" class="input-label">Last Name</label>
+                                </div>
+                            </div>
+                            
+                            <div class="input-group">
+                                <input type="email" id="email" name="email" placeholder=" " class="w-full px-4 py-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all" required>
+                                <label for="email" class="input-label">Email Address</label>
+                            </div>
+                            
+                            <div class="input-group">
+                                <input type="tel" id="phone" name="phone" placeholder=" " class="w-full px-4 py-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all">
+                                <label for="phone" class="input-label">Phone Number (Optional)</label>
+                            </div>
+                            
+                            <div>
+                                <select id="subject" name="subject" class="w-full px-4 py-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all" required>
+                                    <option value="">Select a subject</option>
+                                    <option value="general">General Inquiry</option>
+                                    <option value="support">Technical Support</option>
+                                    <option value="billing">Billing Question</option>
+                                    <option value="partnership">Partnership</option>
+                                    <option value="bulk">Bulk Orders</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div class="input-group">
+                                <textarea id="message" name="message" rows="6" placeholder=" " class="w-full px-4 py-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all resize-none" required></textarea>
+                                <label for="message" class="input-label">Your Message</label>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <input type="checkbox" id="privacy" name="privacy" class="mt-1 mr-3" required>
+                                <label for="privacy" class="text-sm text-gray-600">
+                                    I agree to the <a href="#" class="text-black hover:underline">Privacy Policy</a> and <a href="#" class="text-black hover:underline">Terms of Service</a>
+                                </label>
+                            </div>
+                            
+                            <button type="submit" class="w-full bg-black text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-800 transition-colors shadow-lg hover:shadow-xl hover:-translate-y-1">
+                                Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Contact Information -->
+                <div class="gsap-reveal">
+                    <div class="space-y-8">
+                        <div>
+                            <h2 class="text-3xl font-bold mb-6">Get in touch</h2>
+                            <p class="text-gray-600 text-lg mb-8">We're here to help you succeed. Choose the best way to reach us.</p>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-start">
+                                <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
+                                    <i data-lucide="mail" class="w-6 h-6 text-white"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-semibold mb-2">Email</h3>
+                                    <p class="text-gray-600 mb-1">support@smmpanel.com</p>
+                                    <p class="text-sm text-gray-500">We'll respond within 24 hours</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
+                                    <i data-lucide="phone" class="w-6 h-6 text-white"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-semibold mb-2">Phone</h3>
+                                    <p class="text-gray-600 mb-1">+1 (555) 123-4567</p>
+                                    <p class="text-sm text-gray-500">Mon-Fri, 9AM-6PM EST</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
+                                    <i data-lucide="clock" class="w-6 h-6 text-white"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-semibold mb-2">Business Hours</h3>
+                                    <p class="text-gray-600 mb-1">Monday - Friday: 9:00 AM - 6:00 PM</p>
+                                    <p class="text-gray-600 mb-1">Saturday: 10:00 AM - 4:00 PM</p>
+                                    <p class="text-gray-600">Sunday: Closed</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
+                                    <i data-lucide="message-circle" class="w-6 h-6 text-white"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-semibold mb-2">Live Chat</h3>
+                                    <p class="text-gray-600 mb-1">Available 24/7 on our website</p>
+                                    <button class="text-sm text-black hover:underline font-medium">Start Chat Now →</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Social Media -->
+                        <div class="pt-8 border-t border-gray-200">
+                            <h3 class="text-xl font-semibold mb-4">Follow Us</h3>
+                            <div class="flex space-x-4">
+                                <a href="#" class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 hover:bg-black hover:text-white transition-colors">
+                                    <i data-lucide="facebook" class="w-5 h-5"></i>
+                                </a>
+                                <a href="#" class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 hover:bg-black hover:text-white transition-colors">
+                                    <i data-lucide="instagram" class="w-5 h-5"></i>
+                                </a>
+                                <a href="#" class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 hover:bg-black hover:text-white transition-colors">
+                                    <i data-lucide="twitter" class="w-5 h-5"></i>
+                                </a>
+                                <a href="#" class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 hover:bg-black hover:text-white transition-colors">
+                                    <i data-lucide="linkedin" class="w-5 h-5"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Map Section (Optional) -->
+    <section id="map" class="py-24 px-6 bg-gray-50">
+        <div class="container mx-auto">
+            <div class="text-center mb-16 gsap-reveal">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Visit Our Office</h2>
+                <p class="text-gray-600 max-w-xl mx-auto">Located in the heart of the business district, we're always happy to meet in person.</p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="gsap-reveal">
+                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+                        <div class="h-80 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
+                            <div class="text-center">
+                                <i data-lucide="map-pin" class="w-12 h-12 text-gray-500 mx-auto mb-4"></i>
+                                <p class="text-gray-600">Interactive map would be embedded here</p>
+                                <p class="text-sm text-gray-500 mt-2">123 Business Ave, Tech District, NY 10001</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="gsap-reveal">
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="text-2xl font-bold mb-4">Our Location</h3>
+                            <p class="text-gray-600 text-lg">We're conveniently located in the tech district, easily accessible by public transportation and with plenty of parking available.</p>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-center">
+                                <i data-lucide="map-pin" class="w-5 h-5 text-black mr-3"></i>
+                                <span class="text-gray-600">123 Business Avenue, Tech District, NY 10001</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i data-lucide="train" class="w-5 h-5 text-black mr-3"></i>
+                                <span class="text-gray-600">2 blocks from Metro Station</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i data-lucide="car" class="w-5 h-5 text-black mr-3"></i>
+                                <span class="text-gray-600">Free parking available</span>
+                            </div>
+                        </div>
+                        
+                        <div class="pt-6">
+                            <a href="#" class="inline-flex items-center bg-black text-white px-6 py-3 rounded-xl font-medium hover:bg-gray-800 transition-colors">
+                                <span>Get Directions</span>
+                                <i data-lucide="external-link" class="w-4 h-4 ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- FAQ Section -->
+    <section id="faq" class="py-24 px-6 bg-white">
+        <div class="container mx-auto">
+            <div class="text-center mb-16 gsap-reveal">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Frequently Asked Questions</h2>
+                <p class="text-gray-600 max-w-xl mx-auto">Quick answers to common questions about our services and support</p>
+            </div>
+            
+            <div class="max-w-3xl mx-auto">
+                <div class="space-y-6">
+                    <div class="faq-item bg-gray-50 rounded-2xl p-6 shadow-md gsap-reveal">
+                        <button class="faq-question w-full flex justify-between items-center text-left">
+                            <h3 class="text-xl font-semibold">How fast do you respond to support requests?</h3>
+                            <i data-lucide="chevron-down" class="w-6 h-6 text-gray-500 transition-transform faq-icon"></i>
+                        </button>
+                        <div class="faq-answer mt-4 text-gray-600 hidden">
+                            <p>We typically respond to all support requests within 2-4 hours during business hours. For urgent matters, our live chat is available 24/7 with an average response time of less than 5 minutes.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item bg-gray-50 rounded-2xl p-6 shadow-md gsap-reveal">
+                        <button class="faq-question w-full flex justify-between items-center text-left">
+                            <h3 class="text-xl font-semibold">Can I request custom services?</h3>
+                            <i data-lucide="chevron-down" class="w-6 h-6 text-gray-500 transition-transform faq-icon"></i>
+                        </button>
+                        <div class="faq-answer mt-4 text-gray-600 hidden">
+                            <p>Absolutely! We offer custom packages for businesses with specific needs. Contact our sales team to discuss your requirements and we'll create a tailored solution that fits your goals and budget.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item bg-gray-50 rounded-2xl p-6 shadow-md gsap-reveal">
+                        <button class="faq-question w-full flex justify-between items-center text-left">
+                            <h3 class="text-xl font-semibold">Do you offer API integration?</h3>
+                            <i data-lucide="chevron-down" class="w-6 h-6 text-gray-500 transition-transform faq-icon"></i>
+                        </button>
+                        <div class="faq-answer mt-4 text-gray-600 hidden">
+                            <p>Yes, we provide comprehensive API documentation and support for developers. Our REST API allows you to integrate our services directly into your applications with full automation capabilities.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item bg-gray-50 rounded-2xl p-6 shadow-md gsap-reveal">
+                        <button class="faq-question w-full flex justify-between items-center text-left">
+                            <h3 class="text-xl font-semibold">What payment methods do you accept?</h3>
+                            <i data-lucide="chevron-down" class="w-6 h-6 text-gray-500 transition-transform faq-icon"></i>
+                        </button>
+                        <div class="faq-answer mt-4 text-gray-600 hidden">
+                            <p>We accept all major credit cards, PayPal, bank transfers, and various cryptocurrencies. All payments are processed securely with bank-level encryption to protect your financial information.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Call to Action Section -->
+    <section id="cta" class="bg-gradient-to-br from-black to-gray-900 text-white py-24 px-6">
+        <div class="container mx-auto">
+            <div class="max-w-3xl mx-auto text-center gsap-reveal">
+                <h2 class="text-4xl md:text-5xl font-extrabold mb-6">Need help fast? Reach our 24/7 support.</h2>
+                <p class="text-xl text-gray-300 mb-10">Our support team is always ready to help you with any questions or issues you may have.</p>
+                
+                <div class="grid sm:grid-cols-2 gap-6 max-w-xl mx-auto">
+                    <button id="chat-now" class="block bg-white text-black px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-200 transition-colors shadow-2xl">
+                        Chat Now
+                    </button>
+                    <a href="tel:+15551234567" class="block border border-white bg-transparent text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/10 transition-colors">
+                        Call Us
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="bg-white py-16 px-6 border-t border-gray-200">
+        <div class="container mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+                <div>
+                    <a href="index.html" class="text-2xl font-bold mb-6 inline-block">
+                        <span class="text-black">SMM</span><span class="text-gray-500">Panel</span>
+                        <span class="ml-1 bg-black text-white text-xs px-2 py-0.5 rounded-md">PRO</span>
+                    </a>
+                    <p class="text-gray-600 mb-6">The ultimate social media marketing platform to boost your online presence.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 hover:bg-black hover:text-white transition-colors">
+                            <i data-lucide="facebook" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 hover:bg-black hover:text-white transition-colors">
+                            <i data-lucide="instagram" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 hover:bg-black hover:text-white transition-colors">
+                            <i data-lucide="twitter" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold text-lg mb-6">Quick Links</h3>
+                    <ul class="space-y-3">
+                        <li><a href="index.html" class="text-gray-600 hover:text-black transition-colors">Home</a></li>
+                        <li><a href="about.html" class="text-gray-600 hover:text-black transition-colors">About</a></li>
+                        <li><a href="services.html" class="text-gray-600 hover:text-black transition-colors">Services</a></li>
+                        <li><a href="blog.html" class="text-gray-600 hover:text-black transition-colors">Blog</a></li>
+                        <li><a href="contact.html" class="text-gray-600 hover:text-black transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold text-lg mb-6">Services</h3>
+                    <ul class="space-y-3">
+                        <li><a href="services.html" class="text-gray-600 hover:text-black transition-colors">Instagram</a></li>
+                        <li><a href="services.html" class="text-gray-600 hover:text-black transition-colors">YouTube</a></li>
+                        <li><a href="services.html" class="text-gray-600 hover:text-black transition-colors">TikTok</a></li>
+                        <li><a href="services.html" class="text-gray-600 hover:text-black transition-colors">Twitter</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold text-lg mb-6">Contact Info</h3>
+                    <ul class="space-y-3">
+                        <li class="text-gray-600">support@smmpanel.com</li>
+                        <li class="text-gray-600">+1 (555) 123-4567</li>
+                        <li class="text-gray-600">Mon-Fri, 9AM-6PM EST</li>
+                        <li><a href="#" class="text-black hover:underline">Live Chat 24/7</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-200 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-600 text-sm mb-4 md:mb-0">&copy; 2025 SMMPanel. All rights reserved.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="text-gray-600 hover:text-black text-sm">Privacy Policy</a>
+                    <a href="#" class="text-gray-600 hover:text-black text-sm">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Back to Top Button -->
+    <div class="fixed bottom-8 right-8 z-50">
+        <a href="#" id="back-to-top" class="w-12 h-12 bg-black text-white rounded-full flex items-center justify-center shadow-lg opacity-0 invisible transition-all duration-300 hover:bg-gray-800">
+            <i data-lucide="chevron-up" class="w-6 h-6"></i>
+        </a>
+    </div>
+    
+    <script src="contact.js"></script>
+</body>
+</html>
